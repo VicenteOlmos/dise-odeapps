@@ -1,0 +1,19 @@
+{
+  "name": "apps",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "date-fns": "^2.30.0",
+    "koa": "^2.14.2",
+    "moment": "^2.29.4",
+    "nodemon": "^2.0.22",
+    "xlsx": "^0.18.5"
+  }
+}
