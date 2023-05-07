@@ -1,14 +1,16 @@
 const Koa = require('koa');
+const Router = require('@koa/router');
 const XLSX = require('xlsx');
-const { format } = require('date-fns');
 const fs = require('fs');
+const { format, parse } = require('date-fns');
+const { es } = require('date-fns/locale');
 
 const app = new Koa();
+const router = new Router();
 
-app.use(async (ctx, next) => {
+const readDataFromExcelFiles = () => {
   const data = [];
 
-  // Recorremos cada archivo con el patrón de nombre "aforo_mes_dia" en la carpeta actual
   fs.readdirSync(__dirname).forEach((file) => {
     const matches = file.match(/^aforo_(\d{2})_(\d{2})/);
 
@@ -19,15 +21,11 @@ app.use(async (ctx, next) => {
       const workbook = XLSX.readFile(file);
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-      // Recorremos cada fila de la hoja de Excel y agregamos un objeto al array "data"
       for (let rowNum = 2; sheet[`A${rowNum}`] && sheet[`B${rowNum}`]; rowNum++) {
         const aforo = parseInt(sheet[`A${rowNum}`].v);
-        const fechaHoraNum = sheet[`B${rowNum}`].v; // Leemos la fecha y hora como un número
+        const fechaHoraNum = sheet[`B${rowNum}`].v;
 
-        // Convertimos el valor numérico a una cadena de fecha y hora utilizando "XLSX.SSF.format"
         const fechaHoraStr = XLSX.SSF.format('dd-mm-yyyy hh:mm:ss', fechaHoraNum);
-
-        // Separamos la fecha y la hora de la cadena de fecha y hora utilizando ".split"
         const fechaHoraArr = fechaHoraStr.split(' ');
         const fechaFormateada = fechaHoraArr[0];
         const horaFormateada = fechaHoraArr[1];
@@ -37,8 +35,48 @@ app.use(async (ctx, next) => {
     }
   });
 
-  ctx.body = data; // Devolvemos el array de objetos JSON como respuesta HTTP
+  return data;
+};
+
+router.get('/get_aforo', async (ctx, next) => {
+  ctx.body = readDataFromExcelFiles();
 });
+
+router.get('/besthours', async (ctx, next) => {
+  const data = readDataFromExcelFiles();
+  const daysOfWeek = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes'];
+  const aforoThreshold = 100;
+  const hoursByDay = {};
+
+  daysOfWeek.forEach(day => {
+    hoursByDay[day] = {};
+  });
+
+  data.forEach(({ aforo, fecha, hora }) => {
+    if (aforo < aforoThreshold) {
+      const date = parse(fecha, 'dd-MM-yyyy', new Date());
+      const dayOfWeek = format(date, 'EEEE', { locale: es }).toLowerCase();
+      console.log(dayOfWeek)
+      if (daysOfWeek.includes(dayOfWeek)) {
+        if (!hoursByDay[dayOfWeek][hora]) {
+          hoursByDay[dayOfWeek][hora] = 0;
+        }
+        hoursByDay[dayOfWeek][hora]++;
+      }
+    }
+  });
+
+  const bestHours = {};
+  daysOfWeek.forEach(day => {
+    const hours = hoursByDay[day];
+    const sortedHours = Object.entries(hours).sort((a, b) => b[1] - a[1]);
+    bestHours[day] = sortedHours.map(hour => hour[0]);
+  });
+
+  ctx.body = bestHours;
+});
+
+app.use(router.routes()).use(router.allowedMethods());
 
 app.listen(3000, () => {
   console.log('Servidor Koa.js iniciado en el puerto 3000');
