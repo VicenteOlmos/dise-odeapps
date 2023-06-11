@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mejores Horas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>Selecciona un día</h1>
+    <select id="day-select">
+        <option value="">--Selecciona un día--</option>
+        <option value="lunes">Lunes</option>
+        <option value="martes">Martes</option>
+        <option value="miércoles">Miércoles</option>
+        <option value="jueves">Jueves</option>
+        <option value="viernes">Viernes</option>
+    </select>
+    <button onclick="fetchBestHours()">Mostrar Mejores Horas</button>
+    <div id="best-hours"></div>
+    <script src="main.js"></script>
+</body>
+</html>
