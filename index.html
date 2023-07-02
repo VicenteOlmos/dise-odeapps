@@ -2,24 +2,41 @@
 <html>
 <head>
     <title>Mejores Horas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Selecciona un día</h1>
-    <select id="day-select">
-        <option value="">--Selecciona un día--</option>
-        <option value="lunes">Lunes</option>
-        <option value="martes">Martes</option>
-        <option value="miércoles">Miércoles</option>
-        <option value="jueves">Jueves</option>
-        <option value="viernes">Viernes</option>
-    </select>
-    <button onclick="fetchBestHours()">Mostrar Mejores Horas</button>
-    <div id="best-hours"></div>
+    <div class="content">
+        <h1>Selecciona un día</h1>
+        <div class="select-container">
+            <select id="day-select">
+                <option value="">--Selecciona un día--</option>
+                <option value="lunes">Lunes</option>
+                <option value="martes">Martes</option>
+                <option value="miércoles">Miércoles</option>
+                <option value="jueves">Jueves</option>
+                <option value="viernes">Viernes</option>
+            </select>
+            <button id="show-best-hours-button" onclick="fetchBestHours()">Mostrar Mejores Horas</button>
+
+        </div>
+        <div id="best-hours" class="result"></div>
+        <button id="current-aforo-button">Obtener aforo actual</button>
+        <div id="current-aforo" class="result"></div>
+
+        <div id="comments-section">
+            <h2>Comentarios</h2>
+            <textarea id="comment-box" rows="5" placeholder="Escribe tu comentario aquí..."></textarea>
+            <button id="submit-comment">Enviar Comentario</button>
+        </div>
+        <div id="image-slider">
+            <img src="imagen1.jpg" alt="Gimnasio">
+            <img src="imagen2.jpg" alt="Gimnasio">
+            <img src="imagen3.jpg" alt="Gimnasio">
+            <img src="imagen4.jpg" alt="Gimnasio">
+            <img src="imagen5.jpg" alt="Gimnasio">
+          </div>
+          
+    </div>
     <script src="main.js"></script>
 </body>
 </html>
