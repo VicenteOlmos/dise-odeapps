@@ -2,15 +2,35 @@
 <html>
 <head>
     <title>Mejores Horas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        .clock {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #000;
+            border-radius: 50%;
+            position: relative;
+            margin: 20px;
+        }
+        .hour {
+            position: absolute;
+            width: 2px;
+            height: 50%;
+            background: #000;
+            bottom: 50%;
+            left: calc(50% - 1px);
+            transform-origin: bottom;
+        }
+        .clock-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
     </style>
 </head>
-<body>
-    <h1>Selecciona un día</h1>
-    <select id="day-select">
+<body class="p-5">
+    <h1 class="mb-4">Selecciona un día</h1>
+    <select id="day-select" class="custom-select mb-4">
         <option value="">--Selecciona un día--</option>
         <option value="lunes">Lunes</option>
         <option value="martes">Martes</option>
@@ -18,8 +38,21 @@
         <option value="jueves">Jueves</option>
         <option value="viernes">Viernes</option>
     </select>
-    <button onclick="fetchBestHours()">Mostrar Mejores Horas</button>
-    <div id="best-hours"></div>
+    <div class="mb-4">
+        <label for="start-time">Hora de inicio:</label>
+        <input class="form-control col-1" type="time" id="start-time">
+    </div>
+    <div class="mb-4">
+        <label for="end-time">Hora de fin:</label>
+        <input class="form-control col-1" type="time" id="end-time">
+    </div>
+    <button onclick="fetchBestHours()" class="btn btn-primary mb-4">Mostrar Mejores Horas</button>
+    <div id="best-hours" class="d-flex flex-wrap"></div>
+
     <script src="main.js"></script>
 </body>
 </html>
+
+
+
+
